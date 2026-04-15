@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Ассистент — План проверок</title>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://unpkg.com/lenis@1.3.21/dist/lenis.min.js"></script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:#fafafa;color:#1a1a1a;line-height:1.7}
+        .container{max-width:960px;margin:0 auto;padding:0 24px}
+        nav{background:#fff;border-bottom:1px solid #e5e5e5;padding:16px 0;position:sticky;top:0;z-index:100}
+        nav .container{display:flex;justify-content:space-between;align-items:center}
+        nav .logo{font-weight:700;font-size:1.1em;color:#1a1a1a;text-decoration:none;display:flex;align-items:center;gap:8px}
+        nav .links{display:flex;gap:24px}
+        nav .links a{text-decoration:none;color:#666;font-size:0.9em;font-weight:500;transition:color 0.2s}
+        nav .links a:hover,nav .links a.active{color:#1a1a1a}
+        .hero{padding:80px 0 60px;border-bottom:1px solid #e5e5e5;background:#fff}
+        .hero h1{font-size:2.2em;font-weight:800;margin-bottom:12px}
+        .hero .subtitle{font-size:1.1em;color:#555;max-width:600px}
+        .section{padding:50px 0;border-bottom:1px solid #e5e5e5;background:#fff}
+        .section:last-child{border-bottom:none}
+        .section h2{font-size:1.6em;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+        .section h2 i{color:#666}
+        .segment-card{border:1px solid #e5e5e5;border-radius:10px;padding:24px;margin:16px 0;background:#fafafa}
+        .segment-card .header{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+        .segment-card .icon-box{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.5em;flex-shrink:0}
+        .segment-card h3{font-size:1.2em;font-weight:700;margin:0}
+        .segment-card .tag{display:inline-block;padding:2px 8px;border-radius:8px;font-size:0.7em;font-weight:600}
+        .tag-hot{background:#dc2626;color:#fff}
+        .tag-warm{background:#f59e0b;color:#fff}
+        .tag-test{background:#636e72;color:#fff}
+        .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+        .metric{padding:12px;background:#fff;border-radius:6px;border:1px solid #e5e5e5;text-align:center}
+        .metric .val{font-size:1.3em;font-weight:800;display:block}
+        .metric .lbl{font-size:0.75em;color:#666}
+        .verdict{padding:12px 16px;border-radius:6px;margin:12px 0;font-size:0.9em}
+        .verdict-yes{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}
+        .verdict-maybe{background:#fffbeb;border:1px solid #fde68a;color:#92400e}
+        .check-steps{margin:16px 0}
+        .check-step{display:flex;gap:10px;padding:8px 0;font-size:0.9em}
+        .check-step .num{width:24px;height:24px;background:#1a1a1a;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75em;font-weight:700;flex-shrink:0}
+        .message-box{background:#fff;border:1px solid #e5e5e5;border-radius:8px;padding:16px;margin:12px 0;font-size:0.85em;color:#555;position:relative}
+        .message-box .copy-btn{position:absolute;top:8px;right:8px;background:#1a1a1a;color:#fff;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:0.8em}
+        .message-box .copy-btn:hover{background:#333}
+        .reveal{opacity:0;transform:translateY(20px);transition:opacity 0.5s ease-out,transform 0.5s ease-out}
+        .reveal.visible{opacity:1;transform:translateY(0)}
+        footer{padding:24px 0;text-align:center;font-size:0.85em;color:#888;background:#fff;border-top:1px solid #e5e5e5}
+        footer a{color:#666;margin:0 8px;text-decoration:none}
+        footer a:hover{color:#1a1a1a}
+        @media(max-width:768px){.hero h1{font-size:1.6em}.metrics{grid-template-columns:1fr}.segment-card{padding:16px}}
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="index.html" class="logo"><i data-lucide="headphones" style="width:20px;height:20px"></i>AI-Ассистент</a>
+            <div class="links">
+                <a href="index.html">Продукт</a>
+                <a href="scenarios.html">Сценарии</a>
+                <a href="integrations.html">Интеграции</a>
+                <a href="economics.html">Экономика</a>
+                <a href="focus.html">Фокусы</a>
+                <a href="competitors.html">Конкуренты</a>
+                <a href="sources.html">Источники</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container">
+            <h1>План проверок по сегментам</h1>
+            <p class="subtitle">5 сегментов. Для каждого: прибыль, интересно ли, как проверить, готовое письмо.</p>
+            <div style="margin-top:16px;padding:10px 16px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;font-size:0.9em;color:#166534">
+                ✅ <strong>24 письма отправлены</strong> — стоматологии, юристы, сантехники, салоны, автосервисы. Ждём ответы.
+            </div>
+        </div>
+    </header>
+
+    <section class="section">
+        <div class="container">
+
+            <!-- Стоматологии -->
+            <div class="segment-card reveal">
+                <div class="header">
+                    <div class="icon-box" style="background:#f0fdf4">🦷</div>
+                    <div>
+                        <h3>Стоматологии</h3>
+                        <span class="tag tag-hot">Горячий сегмент</span>
+                    </div>
+                </div>
+                <div class="metrics">
+                    <div class="metric"><span class="val">~35 000</span><span class="lbl">клиник в РФ</span></div>
+                    <div class="metric"><span class="val">65 000 ₽</span><span class="lbl">средний чек (имплант)</span></div>
+                    <div class="metric"><span class="val">45-115 тыс ₽</span><span class="lbl">потенциальная выгода/мес</span></div>
+                </div>
+                <div class="verdict verdict-yes"><strong>Интересно:</strong> Да. Пропущенный звонок = потерянный пациент на 5 000-65 000 ₽. Администратор один, часто занят.</div>
+                <div class="check-steps">
+                    <div class="check-step"><div class="num">1</div><div>Написать 10 клиникам на 2ГИС → спросить про пропущенные</div></div>
+                    <div class="check-step"><div class="num">2</div><div>Позвонить 5 клиникам в нерабочее время → проверить, кто берёт</div></div>
+                    <div class="check-step"><div class="num">3</div><div>Спросить: «Сколько готовы платить за сервис, который спасает 30% пропущенных?»</div></div>
+                </div>
+                <div style="margin:12px 0">
+                    <a href="https://2gis.ru/moscow/search/стоматология" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#f5f5f5;border-radius:6px;text-decoration:none;color:#1a1a1a;font-size:0.85em;font-weight:500">
+                        <i data-lucide="external-link" style="width:14px;height:14px"></i>
+                        2ГИС: Стоматологии Москва
+                    </a>
+                    <a href="https://2gis.ru/spb/search/стоматология" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#f5f5f5;border-radius:6px;text-decoration:none;color:#1a1a1a;font-size:0.85em;font-weight:500;margin-left:8px">
+                        <i data-lucide="external-link" style="width:14px;height:14px"></i>
+                        2ГИС: Стоматологии СПб
+                    </a>
+                </div>
+                <div style="margin:12px 0;padding:12px;background:#fff;border-radius:6px;border:1px solid #e5e5e5;font-size:0.85em">
+                    <strong style="color:#1a1a1a">Конкретные клиники для связи:</strong>
+                    <div style="margin-top:8px;display:grid;gap:6px">
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0">
+                            <span>Доктор Смайл</span>
+                            <span style="color:#666">mail@doctorsmile.ru · doctorsmile.ru</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0">
+                            <span>ПрезиДЕНТ (27 клиник)</span>
+                            <span style="color:#666">prezi-dent.ru</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0">
+                            <span>USMILE</span>
+                            <span style="color:#666">usmileclinic.ru</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0">
+                            <span>Стомпол5</span>
+                            <span style="color:#666">stompol5.ru</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="message-box">
+                    <button class="copy-btn" onclick="copyMsg(this)">Копировать</button>
+                    <strong>Сообщение для 2ГИС:</strong><br><br>
+                    Здравствуйте! Делаю сервис для стоматологий — AI-ассистент, который отвечает на пропущенные звонки.<br><br>
+                    Что умеет:<br>
+                    • Отвечает на вопросы по услугам и ценам (импланты, чистка, отбеливание)<br>
+                    • Записывает пациентов на приём, проверяет свободные окна<br>
+                    • Присылает вам сводку: кто звонил, что спрашивали, что записали<br>
+                    • Настраивается за 15 минут — загружаете прайс и инструкции, всё готово<br>
+                    • Не сломает текущую запись — работает параллельно с YCLIENTS/IDENT<br><br>
+                    Подскажите: сколько звонков в день пропускаете, когда администратор занят? Бывает, что пациенты уходят в другие клиники?<br><br>
+                    Это не продажа, собираю информацию для проекта.
+                </div>
+            </div>
+
+            <!-- Юристы -->
+            <div class="segment-card reveal">
+                <div class="header">
+                    <div class="icon-box" style="background:#fef3c7">⚖️</div>
+                    <div>
+                        <h3>Юристы</h3>
+                        <span class="tag tag-hot">Горячий сегмент</span>
+                    </div>
+                </div>
+                <div class="metrics">
+                    <div class="metric"><span class="val">~235 000</span><span class="lbl">юристов и компаний</span></div>
+                    <div class="metric"><span class="val">200 000 ₽</span><span class="lbl">среднее дело</span></div>
+                    <div class="metric"><span class="val">100-300 тыс ₽</span><span class="lbl">потенциальная выгода/мес</span></div>
+                </div>
+                <div class="verdict verdict-yes"><strong>Интересно:</strong> Да. 78% клиентов выбирают первого ответившего. Юрист в суде — не берёт трубку. Пропущенный звонок = потерянное дело на 50-200 тыс ₽.</div>
+                <div class="check-steps">
+                    <div class="check-step"><div class="num">1</div><div>Написать 10 юристам на Профи.ру → спросить про пропущенные в суде</div></div>
+                    <div class="check-step"><div class="num">2</div><div>Позвонить 5 юристам днём → проверить, кто берёт во время работы</div></div>
+                    <div class="check-step"><div class="num">3</div><div>Спросить: «Если AI ответит клиенту пока вы в суде — это поможет или навредит?»</div></div>
+                </div>
+                <div style="margin:12px 0">
+                    <a href="https://profi.ru/yurist/" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#f5f5f5;border-radius:6px;text-decoration:none;color:#1a1a1a;font-size:0.85em;font-weight:500">
+                        <i data-lucide="external-link" style="width:14px;height:14px"></i>
+                        Профи.ру: Юристы
+                    </a>
+                    <a href="https://avito.ru/rossiya/uslugi/yuridicheskie_uslugi" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#f5f5f5;border-radius:6px;text-decoration:none;color:#1a1a1a;font-size:0.85em;font-weight:500;margin-left:8px">
+                        <i data-lucide="external-link" style="width:14px;height:14px"></i>
+                        Авито: Юридические услуги
+                    </a>
+                </div>
+                <div style="margin:12px 0;padding:12px;background:#fff;border-radius:6px;border:1px solid #e5e5e5;font-size:0.85em">
+                    <strong style="color:#1a1a1a">Конкретные юристы для связи:</strong>
+                    <div style="margin-top:8px;display:grid;gap:6px">
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0">
+                            <span>Адвокат Дигин и партнёры</span>
+                            <span style="color:#666">advokat-digin.ru</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0">
+                            <span>Римское Право</span>
+                            <span style="color:#666">info@rimskoepravo.ru · rimskoepravo.ru</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0">
+                            <span>Адвокат Альянс</span>
+                            <span style="color:#666">advokat-alliance.ru</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0">
+                            <span>Двитекс</span>
+                            <span style="color:#666">dvitex.ru</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="message-box">
+                    <button class="copy-btn" onclick="copyMsg(this)">Копировать</button>
+                    <strong>Сообщение на Профи.ру:</strong><br><br>
+                    Здравствуйте! Пишу не по заказу. Делаю сервис для юристов — AI-ассистент, который отвечает на пропущенные звонки.<br><br>
+                    Что умеет:<br>
+                    • Объясняет клиенту ваши услуги и специализацию (разводы, ДТП, наследство)<br>
+                    • Квалифицирует дело: узнаёт суть, срочность, собирает контакт<br>
+                    • Записывает на консультацию, проверяет свободные окна<br>
+                    • Присылает сводку: кто звонил, какое дело, насколько срочно<br>
+                    • Настраивается за 15 минут — загружаете описание услуг, всё готово<br>
+                    • Не сломает текущий процесс — работает параллельно с вашей CRM<br><br>
+                    Подскажите: бывает, что звонят во время суда? Что происходит с теми, кто не дозвонился — перезванивают или ищут другого юриста?<br><br>
+                    Это исследование, ничего не продаю.
+                </div>
+            </div>
+
+            <!-- Домашние сервисы -->
+            <div class="segment-card reveal">
+                <div class="header">
+                    <div class="icon-box" style="background:#dbeafe">🔧</div>
+                    <div>
+                        <h3>Домашние сервисы</h3>
+                        <span class="tag tag-hot">Горячий сегмент</span>
+                    </div>
+                </div>
+                <div class="metrics">
+                    <div class="metric"><span class="val">~500 000</span><span class="lbl">ИП и компаний</span></div>
+                    <div class="metric"><span class="val">12 000 ₽</span><span class="lbl">средний чек (авария)</span></div>
+                    <div class="metric"><span class="val">30-100 тыс ₽</span><span class="lbl">потенциальная выгода/мес</span></div>
+                </div>
+                <div class="verdict verdict-yes"><strong>Интересно:</strong> Да. Мастер на объекте — не слышит телефон. 60% звонков пропускают. Аварийный вызов = 12 000 ₽, клиент звонит первому кто ответил.</div>
+                <div class="check-steps">
+                    <div class="check-step"><div class="num">1</div><div>Написать 10 сантехникам/электрикам на Авито → спросить про пропущенные на объекте</div></div>
+                    <div class="check-step"><div class="num">2</div><div>Позвонить 5 мастерам днём → проверить, кто берёт во время работы</div></div>
+                    <div class="check-step"><div class="num">3</div><div>Спросить: «Если AI запишет клиента пока вы на объекте — сколько готовы платить?»</div></div>
+                </div>
+                <div style="margin:12px 0">
+                    <a href="https://avito.ru/rossiya/uslugi/santehnik" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#f5f5f5;border-radius:6px;text-decoration:none;color:#1a1a1a;font-size:0.85em;font-weight:500">
+                        <i data-lucide="external-link" style="width:14px;height:14px"></i>
+                        Авито: Сантехники
+                    </a>
+                    <a href="https://avito.ru/rossiya/uslugi/elektrik" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#f5f5f5;border-radius:6px;text-decoration:none;color:#1a1a1a;font-size:0.85em;font-weight:500;margin-left:8px">
+                        <i data-lucide="external-link" style="width:14px;height:14px"></i>
+                        Авито: Электрики
+                    </a>
+                    <a href="https://profi.ru/santehnik/" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#f5f5f5;border-radius:6px;text-decoration:none;color:#1a1a1a;font-size:0.85em;font-weight:500;margin-left:8px">
+                        <i data-lucide="external-link" style="width:14px;height:14px"></i>
+                        Профи.ру: Сантехники
+                    </a>
+                </div>
+                <div style="margin:12px 0;padding:12px;background:#fff;border-radius:6px;border:1px solid #e5e5e5;font-size:0.85em">
+                    <strong style="color:#1a1a1a">Конкретные мастера для связи:</strong>
+                    <div style="margin-top:8px;display:grid;gap:6px">
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0">
+                            <span>Сантехник100</span>
+                            <span style="color:#666">santexnik100@gmail.com · santexnik100.ucoz.ru</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0">
+                            <span>Электрик Центр</span>
+                            <span style="color:#666">elektrik-center.ru@yandex.ru · specsantehnik.ru</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0">
+                            <span>Сантехник-Электрик ООО</span>
+                            <span style="color:#666">stroyka-ms.ru@mail.ru · stroyka-ms.ru</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0">
+                            <span>Сантехник-Электрик1</span>
+                            <span style="color:#666">santehnik-elektrik1.orgs.biz</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="message-box">
+                    <button class="copy-btn" onclick="copyMsg(this)">Копировать</button>
+                    <strong>Сообщение на Авито:</strong><br><br>
+                    Здравствуйте! Пишу не по заказу. Делаю сервис для мастеров — AI-ассистент, который отвечает на пропущенные звонки.<br><br>
+                    Что умеет:<br>
+                    • Объясняет клиенту ваши услуги и цены (замена смесителя, проводка, трубы)<br>
+                    • Записывает на вызов, узнаёт адрес и суть проблемы<br>
+                    • Определяет срочность: авария — сразу уведомляет, плановый — в очередь<br>
+                    • Присылает сводку в Telegram: кто звонил, что случилось, адрес<br>
+                    • Настраивается за 15 минут — загружаете прайс и зону работы, всё готово<br>
+                    • Не сломает текущий процесс — работает параллельно, вы ничего не меняете<br><br>
+                    Подскажите: сколько звонков в день пропускаете, когда на вызове? Клиенты перезванивают или уходят к конкурентам?<br><br>
+                    Это не продажа, собираю данные для проекта.
+                </div>
+            </div>
+
+            <!-- Салоны красоты -->
+            <div class="segment-card reveal">
+                <div class="header">
+                    <div class="icon-box" style="background:#fce7f3">💇</div>
+                    <div>
+                        <h3>Салоны красоты</h3>
+                        <span class="tag tag-warm">Тёплый сегмент</span>
+                    </div>
+                </div>
+                <div class="metrics">
+                    <div class="metric"><span class="val">~180 000</span><span class="lbl">салонов в РФ</span></div>
+                    <div class="metric"><span class="val">3 500 ₽</span><span class="lbl">средний чек</span></div>
+                    <div class="metric"><span class="val">15-40 тыс ₽</span><span class="lbl">потенциальная выгода/мес</span></div>
+                </div>
+                <div class="verdict verdict-maybe"><strong>Интересно:</strong> Под вопросом. У многих есть YCLIENTS/DIKIDI с онлайн-записью. Но мастера заняты — не берут трубку. No-show 14% — AI напоминания могут помочь.</div>
+                <div class="check-steps">
+                    <div class="check-step"><div class="num">1</div><div>Написать 10 салонам → спросить, сколько звонков пропускают в пик</div></div>
+                    <div class="check-step"><div class="num">2</div><div>Позвонить 5 салонам в субботу 13:00 → проверить, кто берёт</div></div>
+                    <div class="check-step"><div class="num">3</div><div>Спросить: «Онлайн-запись решает проблему или звонки всё равно важны?»</div></div>
+                </div>
+                <div style="margin:12px 0">
+                    <a href="https://2gis.ru/moscow/search/салон%20красоты" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#f5f5f5;border-radius:6px;text-decoration:none;color:#1a1a1a;font-size:0.85em;font-weight:500">
+                        <i data-lucide="external-link" style="width:14px;height:14px"></i>
+                        2ГИС: Салоны красоты Москва
+                    </a>
+                    <a href="https://avito.ru/rossiya/uslugi/parikmaher" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#f5f5f5;border-radius:6px;text-decoration:none;color:#1a1a1a;font-size:0.85em;font-weight:500;margin-left:8px">
+                        <i data-lucide="external-link" style="width:14px;height:14px"></i>
+                        Авито: Парикмахеры
+                    </a>
+                </div>
+                <div style="margin:12px 0;padding:12px;background:#fff;border-radius:6px;border:1px solid #e5e5e5;font-size:0.85em">
+                    <strong style="color:#1a1a1a">Конкретные салоны для связи:</strong>
+                    <div style="margin-top:8px;display:grid;gap:6px">
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0">
+                            <span>Город Красоты (33 филиала)</span>
+                            <span style="color:#666">gorod-krasoti.com</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0">
+                            <span>Щегол (Schegol)</span>
+                            <span style="color:#666">Schegol.barbershop@gmail.com · schegol-barbershop.ru</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0">
+                            <span>Zavod Barber</span>
+                            <span style="color:#666">zavodbarber@yandex.ru · zavodbarber.ru</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0">
+                            <span>Barberia</span>
+                            <span style="color:#666">barberia.ru</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0">
+                            <span>Салон Алёна</span>
+                            <span style="color:#666">studiobeauty-alena.ru</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0">
+                            <span>SACO Beauty Group</span>
+                            <span style="color:#666">saco-beauty.com</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="message-box">
+                    <button class="copy-btn" onclick="copyMsg(this)">Копировать</button>
+                    <strong>Сообщение в Instagram/2ГИС:</strong><br><br>
+                    Здравствуйте! Делаю сервис для салонов — AI-ассистент, который отвечает на пропущенные звонки.<br><br>
+                    Что умеет:<br>
+                    • Объясняет клиенту ваши услуги и цены (окрашивание, маникюр, стрижки)<br>
+                    • Записывает к мастеру, проверяет свободные окна<br>
+                    • Отправляет напоминания о записи — снижает неявки на 40%<br>
+                    • Присылает сводку: кто записался, к кому, на когда<br>
+                    • Настраивается за 15 минут — загружаете прайс и расписание, всё готово<br>
+                    • Не сломает текущую запись — работает параллельно с YCLIENTS/DIKIDI<br><br>
+                    Подскажите: сколько звонков пропускаете в пик (суббота 13:00)? Онлайн-запись решает проблему или клиенты всё равно звонят?<br><br>
+                    Это исследование, ничего не продаю.
+                </div>
+            </div>
+
+            <!-- Автосервисы -->
+            <div class="segment-card reveal">
+                <div class="header">
+                    <div class="icon-box" style="background:#e0e7ff">🚗</div>
+                    <div>
+                        <h3>Автосервисы</h3>
+                        <span class="tag tag-warm">Тёплый сегмент</span>
+                    </div>
+                </div>
+                <div class="metrics">
+                    <div class="metric"><span class="val">117 500</span><span class="lbl">точек в РФ</span></div>
+                    <div class="metric"><span class="val">15 000 ₽</span><span class="lbl">средний чек ремонта</span></div>
+                    <div class="metric"><span class="val">40-120 тыс ₽</span><span class="lbl">потенциальная выгода/мес</span></div>
+                </div>
+                <div class="verdict verdict-yes"><strong>Интересно:</strong> Да. Механики под машиной — не берут трубку. 40% звонков пропускают. Клиент звонит 2-3 сервисам и едет к первому кто ответил.</div>
+                <div class="check-steps">
+                    <div class="check-step"><div class="num">1</div><div>Написать 10 автосервисам на 2ГИС → спросить про пропущенные</div></div>
+                    <div class="check-step"><div class="num">2</div><div>Позвонить 5 сервисам в будни 14:00 → проверить, кто берёт</div></div>
+                    <div class="check-step"><div class="num">3</div><div>Спросить: «Если AI запишет клиента на диагностику пока механики заняты — сколько готовы платить?»</div></div>
+                </div>
+                <div style="margin:12px 0">
+                    <a href="https://2gis.ru/moscow/search/автосервис" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#f5f5f5;border-radius:6px;text-decoration:none;color:#1a1a1a;font-size:0.85em;font-weight:500">
+                        <i data-lucide="external-link" style="width:14px;height:14px"></i>
+                        2ГИС: Автосервисы Москва
+                    </a>
+                    <a href="https://avito.ru/rossiya/uslugi/avtoservis" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#f5f5f5;border-radius:6px;text-decoration:none;color:#1a1a1a;font-size:0.85em;font-weight:500;margin-left:8px">
+                        <i data-lucide="external-link" style="width:14px;height:14px"></i>
+                        Авито: Автосервисы
+                    </a>
+                </div>
+                <div style="margin:12px 0;padding:12px;background:#fff;border-radius:6px;border:1px solid #e5e5e5;font-size:0.85em">
+                    <strong style="color:#1a1a1a">Конкретные автосервисы для связи:</strong>
+                    <div style="margin-top:8px;display:grid;gap:6px">
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0">
+                            <span>Стилберг</span>
+                            <span style="color:#666">info@stilberg.ru · stilberg.ru</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0">
+                            <span>Автосервис Концепт</span>
+                            <span style="color:#666">conceptab@mail.ru · konzept-ab.ru</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0">
+                            <span>АвтоРусСервис</span>
+                            <span style="color:#666">info@avtorusservis.ru · avtorusservis.ru</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0">
+                            <span>ID-Auto (Hyundai/KIA)</span>
+                            <span style="color:#666">4956496626@mail.ru · id-auto.net</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0">
+                            <span>ALLOGARAGE</span>
+                            <span style="color:#666">allogarage.ru</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0">
+                            <span>Auto Repair Kits</span>
+                            <span style="color:#666">sales@autorepairkits.net · autorepairkits.net</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="message-box">
+                    <button class="copy-btn" onclick="copyMsg(this)">Копировать</button>
+                    <strong>Сообщение на 2ГИС:</strong><br><br>
+                    Здравствуйте! Делаю сервис для автосервисов — AI-ассистент, который отвечает на пропущенные звонки.<br><br>
+                    Что умеет:<br>
+                    • Объясняет клиенту ваши услуги и цены (диагностика, колодки, ГРМ)<br>
+                    • Записывает на сервис, узнаёт марку авто и суть проблемы<br>
+                    • Проверяет статус ремонта: «машина готова?» — отвечает без мастера<br>
+                    • Присылает сводку: кто записался, на что, когда<br>
+                    • Настраивается за 15 минут — загружаете прайс и услуги, всё готово<br>
+                    • Не сломает текущий процесс — работает параллельно, механики не отвлекаются<br><br>
+                    Подскажите: сколько звонков в день пропускаете, когда все на объектах? Клиенты перезванивают или едут в другой сервис?<br><br>
+                    Это исследование, ничего не продаю.
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section style="padding:30px 0;background:#fff;border-top:1px solid #e5e5e5">
+        <div class="container" style="display:flex;justify-content:space-between;align-items:center">
+            <a href="competitors.html" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#f5f5f5;color:#1a1a1a;text-decoration:none;border-radius:8px;font-size:0.9em;font-weight:500">
+                <i data-lucide="arrow-left" style="width:16px;height:16px"></i>
+                Назад: Конкуренты
+            </a>
+            <a href="sources.html" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#1a1a1a;color:#fff;text-decoration:none;border-radius:8px;font-size:0.9em;font-weight:500">
+                Далее: Источники
+                <i data-lucide="arrow-right" style="width:16px;height:16px"></i>
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <a href="index.html">Продукт</a>
+            <a href="scenarios.html">Сценарии</a>
+            <a href="integrations.html">Интеграции</a>
+            <a href="economics.html">Экономика</a>
+            <a href="focus.html">Фокусы</a>
+            <a href="competitors.html">Конкуренты</a>
+            <a href="sources.html">Источники</a>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        const lenis=new Lenis({duration:0.8,easing:(t)=>Math.min(1,1.001-Math.pow(2,-10*t)),smoothWheel:true});
+        function raf(time){lenis.raf(time);requestAnimationFrame(raf);}
+        requestAnimationFrame(raf);
+        const revealObserver=new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible');});},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+        document.querySelectorAll('.reveal').forEach(el=>{revealObserver.observe(el);});
+        function copyMsg(btn){
+            const box=btn.parentElement;
+            const text=box.innerText.replace('Копировать','').trim();
+            navigator.clipboard.writeText(text).then(()=>{btn.textContent='Скопировано!';setTimeout(()=>{btn.textContent='Копировать';},2000);});
+        }
+    </script>
+</body>
+</html>

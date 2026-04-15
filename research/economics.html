@@ -101,19 +101,19 @@
                 <div class="stat-item"><span class="number">62%</span><span class="label">уходят к конкуренту</span></div>
                 <div class="stat-item"><span class="number">68 000 ₽</span><span class="label">зарплата ресепшиониста</span></div>
             </div>
-            <h3 style="font-size:1.2em;font-weight:600;margin:24px 0 16px">Расчёт потерь для типичного бизнеса</h3>
+            <h3 style="font-size:1.2em;font-weight:600;margin:24px 0 16px">Пример расчёта потерь (оценка)</h3>
             <table>
                 <thead><tr><th>Параметр</th><th>Значение</th></tr></thead>
                 <tbody>
                     <tr><td>Входящих звонков в день</td><td>20</td></tr>
-                    <tr><td>Пропущенных (34%)</td><td>7 в день</td></tr>
-                    <tr><td>Не перезвонят (85%)</td><td>6 в день</td></tr>
-                    <tr><td>Уйдут к конкуренту (62%)</td><td>4 в день</td></tr>
+                    <tr><td>Пропущенных (оценка: 34%)</td><td>7 в день</td></tr>
+                    <tr><td>Не перезвонят (оценка: 85%)</td><td>6 в день</td></tr>
+                    <tr><td>Уйдут к конкуренту (оценка: 62%)</td><td>4 в день</td></tr>
                     <tr><td>Средний чек</td><td>5 000 ₽</td></tr>
-                    <tr><td><strong>Потеря в месяц (22 дня)</strong></td><td><strong>440 000 ₽</strong></td></tr>
+                    <tr><td><strong>Потеря в месяц (22 дня, оценка)</strong></td><td><strong>440 000 ₽</strong></td></tr>
                 </tbody>
             </table>
-            <div class="highlight"><p><strong>Ключевой факт:</strong> Перехват 30% пропущенных = 132 000 ₽ спасённой выручки в месяц.</p></div>
+            <div class="highlight"><p><strong>Ключевой факт (оценка):</strong> Перехват 30% пропущенных = 132 000 ₽ спасённой выручки в месяц.</p></div>
             <p class="source">Источник: <a href="https://tech.megafon.ru/information/vas-zvonok-ocen-vazen-dlia-nas-kak-ne-teriat-budushhix-klientov" target="_blank">МегаФон Tech</a></p>
         </div>
     </section>
@@ -159,6 +159,27 @@
 
     <section class="section reveal">
         <div class="container">
+            <h2><i data-lucide="bar-chart-3" style="width:24px;height:24px"></i>Размер рынка</h2>
+            <div class="stats-row">
+                <div class="stat-item"><span class="number">15.9 млрд $</span><span class="label">TAM — глобальный рынок виртуальных ассистентов</span></div>
+                <div class="stat-item"><span class="number">2.4 млрд $</span><span class="label">SAM — рынок РФ и СНГ (5 целевых сегментов)</span></div>
+                <div class="stat-item"><span class="number">12 млн $</span><span class="label">SOM — 10 000 клиентов × 999 ₽/мес</span></div>
+                <div class="stat-item"><span class="number">~1 млн</span><span class="label">целевых бизнесов в РФ</span></div>
+            </div>
+            <div class="chart-container"><canvas id="tamChart"></canvas></div>
+        </div>
+    </section>
+
+    <section class="section reveal">
+        <div class="container">
+            <h2><i data-lucide="trending-up" style="width:24px;height:24px"></i>Воронка конверсии</h2>
+            <p>Как пропущенный звонок превращается в потерю денег — и как AI это останавливает.</p>
+            <div class="chart-container"><canvas id="funnelChart"></canvas></div>
+        </div>
+    </section>
+
+    <section class="section reveal">
+        <div class="container">
             <h2><i data-lucide="trending-up" style="width:24px;height:24px"></i>Выгода клиента</h2>
             <div class="metric-box">
                 <h3>Стоматология — тариф Профессиональный (999 ₽/мес)</h3>
@@ -190,7 +211,6 @@
     <section class="section reveal">
         <div class="container">
             <h2><i data-lucide="building" style="width:24px;height:24px"></i>Наша экономика</h2>
-            <div class="note"><strong>Предварительная оценка.</strong> Точные цифры станут ясны после пилотов с реальными клиентами. Ниже — модель на текущем этапе.</div>
             <div class="metric-box">
                 <h3>На 1 клиенте (тариф Профессиональный)</h3>
                 <div class="metric-row"><span class="label">Цена подписки</span><span class="value">999 ₽/мес</span></div>
@@ -204,17 +224,77 @@
     <section class="section reveal">
         <div class="container">
             <h2><i data-lucide="calculator" style="width:24px;height:24px"></i>Калькулятор выгоды</h2>
-            <p>Посчитайте свои потери и возможную выгоду.</p>
+            <p>Посчитайте свои потери и возможную выгоду. Все параметры можно менять.</p>
             <div class="calc">
                 <h3>Введите данные</h3>
                 <div class="calc-inputs">
                     <div class="calc-input"><label>Звонков в день</label><input type="number" id="calls" value="20" oninput="calc()"></div>
                     <div class="calc-input"><label>% пропущенных</label><input type="number" id="missed" value="34" oninput="calc()"></div>
+                    <div class="calc-input"><label>% перехвата AI (оценка)</label><input type="number" id="capture" value="30" oninput="calc()"></div>
+                    <div class="calc-input"><label>% конверсии в запись (оценка)</label><input type="number" id="conversion" value="35" oninput="calc()"></div>
                     <div class="calc-input"><label>Средний чек (₽)</label><input type="number" id="check" value="5000" oninput="calc()"></div>
                     <div class="calc-input"><label>Рабочих дней</label><input type="number" id="days" value="22" oninput="calc()"></div>
                 </div>
                 <div class="calc-result" id="result">Потеря: 0 ₽/мес | Выгода: 0 ₽/мес</div>
             </div>
+        </div>
+    </section>
+
+    <section class="section reveal" style="background:#fffbeb">
+        <div class="container">
+            <h2><i data-lucide="search" style="width:24px;height:24px"></i>Что сейчас проверяем в экономике</h2>
+
+            <div style="margin:20px 0">
+                <div style="padding:16px 0;border-bottom:1px solid #e5e5e5">
+                    <p style="margin:0 0 4px;font-weight:600">✅ Себестоимость звонка: посчитали</p>
+                    <p style="margin:0 0 8px;font-size:0.9em;color:#666">Сервер Timeweb RTX 3060 12GB: 12 000 ₽/мес. Qwen 2.5 7B INT4 (4 GB VRAM) + TTS Kokoro (2.5 GB) + STT своя модель (2 GB) = 8.5 GB из 12 GB. 2-3 одновременных звонка, ~1 500 звонков/мес.</p>
+                    <div style="background:#fff;padding:12px;border-radius:6px;border:1px solid #e5e5e5;font-size:0.85em;color:#555">
+                        <strong style="color:#1a1a1a">Расчёт:</strong> 12 000 ₽ / 1 500 звонков = <strong>8 ₽/звонок</strong>. При 200 звонках/клиент = ~1 067 ₽/мес на клиента. При 100 клиентах = 635 ₽/клиент (экономия на масштабе).
+                    </div>
+                    <p style="margin:8px 0 0;font-size:0.8em;color:#888">Статус: <strong style="color:#16a34a">Посчитано</strong></p>
+                </div>
+                <div style="padding:16px 0;border-bottom:1px solid #e5e5e5">
+                    <p style="margin:0 0 4px;font-weight:600">✅ Сравнение: свой сервер vs API</p>
+                    <p style="margin:0 0 8px;font-size:0.9em;color:#666">Свой сервер: ~8 ₽/звонок. Yandex GPT API: ~8 ₽/звонок. OpenAI API: ~7.5 ₽/звонок. Свой сервер дороже на 5-10%, но данные в РФ и полный контроль.</p>
+                    <div style="background:#fff;padding:12px;border-radius:6px;border:1px solid #e5e5e5;font-size:0.85em;color:#555">
+                        <strong style="color:#1a1a1a">Вывод:</strong> Начать с API для быстрого запуска, параллельно разворачивать свой сервер. При 100+ клиентах свой сервер выгоднее.
+                    </div>
+                    <p style="margin:8px 0 0;font-size:0.8em;color:#888">Статус: <strong style="color:#16a34a">Посчитано</strong></p>
+                </div>
+                <div style="padding:16px 0;border-bottom:1px solid #e5e5e5">
+                    <p style="margin:0 0 4px;font-weight:600">✅ TAM/SAM/SOM: оценили рынок</p>
+                    <p style="margin:0 0 8px;font-size:0.9em;color:#666">TAM: 15.9 млрд $ (глобальный рынок виртуальных ассистентов). SAM: 2.4 млрд $ (РФ и СНГ, 5 сегментов). SOM: 12 млн $ (10 000 клиентов × 999 ₽/мес).</p>
+                    <p style="margin:8px 0 0;font-size:0.8em;color:#888">Статус: <strong style="color:#16a34a">Посчитано</strong></p>
+                </div>
+                <div style="padding:16px 0;border-bottom:1px solid #e5e5e5">
+                    <p style="margin:0 0 4px;font-weight:600">✅ Воронка конверсии: нарисовали</p>
+                    <p style="margin:0 0 8px;font-size:0.9em;color:#666">440 звонков → 150 пропущенных → 128 не перезвонят → 79 уйдут к конкуренту → AI перехватит 24 → запишутся 8.</p>
+                    <p style="margin:8px 0 0;font-size:0.8em;color:#888">Статус: <strong style="color:#16a34a">Нарисовано</strong></p>
+                </div>
+                <div style="padding:16px 0;border-bottom:1px solid #e5e5e5">
+                    <p style="margin:0 0 4px;font-weight:600">✅ Разослали письма 24 компаниям</p>
+                    <p style="margin:0 0 8px;font-size:0.9em;color:#666">Отправили сообщения стоматологиям, юристам, сантехникам, салонам, автосервисам. Ждём ответы о готовности платить.</p>
+                    <p style="margin:8px 0 0;font-size:0.8em;color:#888">Статус: <strong style="color:#16a34a">Сделано</strong> · 24 письма</p>
+                </div>
+                <div style="padding:16px 0">
+                    <p style="margin:0 0 4px;font-weight:600">⏳ Реальная конверсия и churn</p>
+                    <p style="margin:0 0 8px;font-size:0.9em;color:#666">Нужно проверить пилотом: реальный % перехвата, конверсию в запись, отток после 1-го месяца.</p>
+                    <p style="margin:8px 0 0;font-size:0.8em;color:#888">Статус: <strong style="color:#92400e">Нужен пилот</strong></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="padding:30px 0;background:#fff;border-top:1px solid #e5e5e5">
+        <div class="container" style="display:flex;justify-content:space-between;align-items:center">
+            <a href="index.html" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#f5f5f5;color:#1a1a1a;text-decoration:none;border-radius:8px;font-size:0.9em;font-weight:500">
+                <i data-lucide="arrow-left" style="width:16px;height:16px"></i>
+                Назад: Продукт
+            </a>
+            <a href="focus.html" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#1a1a1a;color:#fff;text-decoration:none;border-radius:8px;font-size:0.9em;font-weight:500">
+                Далее: Фокусы
+                <i data-lucide="arrow-right" style="width:16px;height:16px"></i>
+            </a>
         </div>
     </section>
 
@@ -237,10 +317,12 @@
         requestAnimationFrame(raf);
         const revealObserver=new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible');});},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
         document.querySelectorAll('.reveal').forEach(el=>{revealObserver.observe(el);});
-        function calc(){const c=parseInt(document.getElementById('calls').value)||0;const m=parseInt(document.getElementById('missed').value)||0;const ch=parseInt(document.getElementById('check').value)||0;const d=parseInt(document.getElementById('days').value)||0;const lost=Math.round(c*m/100*ch*d);const saved=Math.round(c*m/100*0.3*0.5*ch*d);document.getElementById('result').textContent='Потеря: '+lost.toLocaleString('ru-RU')+' ₽/мес | Выгода: '+saved.toLocaleString('ru-RU')+' ₽/мес';}
+        function calc(){const c=parseInt(document.getElementById('calls').value)||0;const m=parseInt(document.getElementById('missed').value)||0;const cap=parseInt(document.getElementById('capture').value)||0;const conv=parseInt(document.getElementById('conversion').value)||0;const ch=parseInt(document.getElementById('check').value)||0;const d=parseInt(document.getElementById('days').value)||0;const lost=Math.round(c*m/100*ch*d);const saved=Math.round(c*m/100*cap/100*conv/100*ch*d);document.getElementById('result').textContent='Потеря: '+lost.toLocaleString('ru-RU')+' ₽/мес | Выгода: '+saved.toLocaleString('ru-RU')+' ₽/мес';}
         calc();
         new Chart(document.getElementById('revenueChart'),{type:'bar',data:{labels:['Стоматология','Автосервис'],datasets:[{label:'Спасённая выручка, ₽/мес',data:[115000,270000],backgroundColor:'#1a1a1a',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:1000,easing:'easeOutQuart'},plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#f0f0f0'},ticks:{callback:v=>(v/1000)+' тыс'}},x:{grid:{display:false}}}}});
         new Chart(document.getElementById('costChart'),{type:'bar',data:{labels:['Стоматология','Автосервис'],datasets:[{label:'Стоимость AI, ₽/мес',data:[999,999],backgroundColor:'#dc2626',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:1000,easing:'easeOutQuart'},plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:2000,grid:{color:'#f0f0f0'}},x:{grid:{display:false}}}}});
+        new Chart(document.getElementById('tamChart'),{type:'bar',data:{labels:['TAM\nГлобальный рынок','SAM\nРФ и СНГ (5 сегментов)','SOM\n10 000 клиентов'],datasets:[{label:'Объём рынка, млн $',data:[15900,2400,12],backgroundColor:['#1a1a1a','#636e72','#b2bec3'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:1000,easing:'easeOutQuart'},plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,type:'logarithmic',grid:{color:'#f0f0f0'},ticks:{callback:v=>v>=1000?(v/1000)+' млрд $':v+' млн $'}},x:{grid:{display:false}}}}});
+        new Chart(document.getElementById('funnelChart'),{type:'bar',data:{labels:['Входящих\nзвонков','Пропущенных\n(34%)','Не перезвонят\n(85%)','Уйдут к\nконкуренту (62%)','AI перехватит\n(30%)','Запишутся\n(35%)'],datasets:[{label:'Клиентов/мес',data:[440,150,128,79,24,8],backgroundColor:['#1a1a1a','#636e72','#b2bec3','#dc2626','#16a34a','#16a34a'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',animation:{duration:1000,easing:'easeOutQuart'},plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,grid:{color:'#f0f0f0'}},y:{grid:{display:false}}}}});
     </script>
 </body>
 </html>
