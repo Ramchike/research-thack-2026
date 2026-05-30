@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Ассистент — Кастдев</title>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://unpkg.com/lenis@1.3.21/dist/lenis.min.js"></script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:#fafafa;color:#1a1a1a;line-height:1.7}
+        .container{max-width:960px;margin:0 auto;padding:0 24px}
+        nav{background:#fff;border-bottom:1px solid #e5e5e5;padding:16px 0;position:sticky;top:0;z-index:100}
+        nav .container{display:flex;justify-content:space-between;align-items:center}
+        nav .logo{font-weight:700;font-size:1.1em;color:#1a1a1a;text-decoration:none;display:flex;align-items:center;gap:8px}
+        nav .links{display:flex;gap:18px}
+        nav .links a{text-decoration:none;color:#666;font-size:0.9em;font-weight:500;transition:color 0.2s}
+        nav .links a:hover,nav .links a.active{color:#1a1a1a}
+        .hero{padding:80px 0 60px;border-bottom:1px solid #e5e5e5;background:#fff}
+        .hero h1{font-size:2.2em;font-weight:800;margin-bottom:12px;line-height:1.2}
+        .hero .subtitle{font-size:1.1em;color:#555;max-width:680px}
+        .meta-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0 0}
+        .meta-item{padding:14px;background:#f9fafb;border:1px solid #e5e5e5;border-radius:8px}
+        .meta-item .label{display:block;font-size:0.75em;color:#888;margin-bottom:3px}
+        .meta-item .value{font-size:0.95em;font-weight:700;color:#1a1a1a}
+        .section{padding:50px 0;border-bottom:1px solid #e5e5e5;background:#fff}
+        .section:last-child{border-bottom:none}
+        .section h2{font-size:1.6em;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+        .section h2 i{color:#666}
+        .section p{color:#555;margin-bottom:14px;max-width:720px}
+        .method-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}
+        .method-step{padding:18px;background:#fafafa;border:1px solid #e5e5e5;border-radius:8px}
+        .method-step .num{width:28px;height:28px;background:#1a1a1a;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8em;font-weight:800;margin-bottom:10px}
+        .method-step h3{font-size:1em;margin-bottom:6px}
+        .method-step p{font-size:0.85em;margin:0;color:#666}
+        .interviewer-note{background:#f9fafb;border:1px solid #e5e5e5;border-radius:8px;padding:18px;margin:20px 0}
+        .interviewer-note strong{color:#1a1a1a}
+        .question-block{padding:26px 0;border-bottom:1px solid #e5e5e5}
+        .question-block:last-child{border-bottom:none}
+        .question-block h3{display:flex;align-items:center;gap:10px;font-size:1.25em;margin-bottom:8px}
+        .question-block h3 i{color:#666}
+        .question-block .hint{font-size:0.9em;color:#666;margin-bottom:14px}
+        .question-list{padding-left:22px;margin:0}
+        .question-list li{margin-bottom:10px;color:#333}
+        .question-list li::marker{font-weight:700;color:#1a1a1a}
+        .script-box{position:relative;background:#f9fafb;border:1px solid #e5e5e5;border-radius:8px;padding:18px;margin:18px 0;color:#333}
+        .script-box .copy-btn{position:absolute;top:10px;right:10px;background:#1a1a1a;color:#fff;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;font-size:0.8em}
+        .script-box .copy-btn:hover{background:#333}
+        .score-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:18px 0}
+        .score-item{padding:16px;background:#fafafa;border:1px solid #e5e5e5;border-radius:8px}
+        .score-item h3{font-size:1em;margin-bottom:8px}
+        .score-item ul{padding-left:18px;color:#555;font-size:0.9em}
+        .score-item li{margin-bottom:6px}
+        .source{font-size:0.8em;color:#888;margin-top:10px}
+        .source a{color:#666;text-decoration:underline}
+        .reveal{opacity:0;transform:translateY(20px);transition:opacity 0.5s ease-out,transform 0.5s ease-out}
+        .reveal.visible{opacity:1;transform:translateY(0)}
+        footer{padding:24px 0;text-align:center;font-size:0.85em;color:#888;background:#fff;border-top:1px solid #e5e5e5}
+        footer a{color:#666;margin:0 8px;text-decoration:none}
+        footer a:hover{color:#1a1a1a}
+        .nav-toggle{display:none;align-items:center;background:none;border:none;cursor:pointer;padding:4px;color:#1a1a1a}
+        @media(max-width:900px){
+          .nav-toggle{display:flex}
+          nav{position:relative}
+          nav .links{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;flex-direction:column;padding:8px 0;border-bottom:1px solid #e5e5e5;box-shadow:0 4px 12px rgba(0,0,0,0.08);z-index:99}
+          nav .links.open{display:flex}
+          nav .links a{padding:10px 24px;border-bottom:1px solid #f5f5f5;font-size:0.95em}
+          nav .links a:last-child{border-bottom:none}
+          .hero{padding:40px 0 32px}
+          .hero h1{font-size:1.6em}
+          .section{padding:32px 0}
+          .meta-row,.method-grid,.score-grid{grid-template-columns:1fr}
+          .script-box{padding-top:48px}
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="index.html" class="logo"><i data-lucide="headphones" style="width:20px;height:20px"></i>AI-Ассистент</a>
+            <button class="nav-toggle" onclick="document.querySelector('nav .links').classList.toggle('open')" aria-label="Меню"><i data-lucide="menu" style="width:22px;height:22px"></i></button>
+            <div class="links">
+                <a href="index.html">Продукт</a>
+                <a href="scenarios.html">Сценарии</a>
+                <a href="integrations.html">Интеграции</a>
+                <a href="economics.html">Экономика</a>
+                <a href="focus.html">Фокусы</a>
+                <a href="competitors.html">Конкуренты</a>
+                <a href="custdev.html" class="active">Кастдев</a>
+                <a href="sources.html">Источники</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container">
+            <h1>Вопросы для видео-кастдева</h1>
+            <p class="subtitle">Открытый сценарий интервью с владельцами малого бизнеса: как они принимают звонки, где теряют клиентов и что должно случиться, чтобы AI-ассистент стал рабочим инструментом.</p>
+            <div class="meta-row">
+                <div class="meta-item"><span class="label">Формат</span><span class="value">Видео 25-35 минут</span></div>
+                <div class="meta-item"><span class="label">Аудитория</span><span class="value">Владельцы МСБ/МСП</span></div>
+                <div class="meta-item"><span class="label">Цель</span><span class="value">Проверить боль звонков</span></div>
+                <div class="meta-item"><span class="label">Результат</span><span class="value">Решение о пилоте</span></div>
+            </div>
+        </div>
+    </header>
+
+    <section class="section reveal">
+        <div class="container">
+            <h2><i data-lucide="route" style="width:24px;height:24px"></i>Логика интервью</h2>
+            <p>Вопросы идут от фактов к решению. Сначала просим описать текущую ситуацию, затем достаём конкретные проблемы, уточняем последствия и только после этого обсуждаем желаемый результат и концепт AI-ассистента.</p>
+            <div class="method-grid">
+                <div class="method-step">
+                    <div class="num">1</div>
+                    <h3>Ситуация</h3>
+                    <p>Как сейчас устроены звонки, запись, ответственность и инструменты.</p>
+                </div>
+                <div class="method-step">
+                    <div class="num">2</div>
+                    <h3>Проблема</h3>
+                    <p>Где процесс ломается, кто страдает, какие случаи повторяются.</p>
+                </div>
+                <div class="method-step">
+                    <div class="num">3</div>
+                    <h3>Последствия</h3>
+                    <p>Что бизнес теряет: деньги, время, репутацию, контроль.</p>
+                </div>
+                <div class="method-step">
+                    <div class="num">4</div>
+                    <h3>Возможности</h3>
+                    <p>Что откроется, если пропущенные звонки перестанут теряться.</p>
+                </div>
+            </div>
+            <p class="source">Методическая база: открытые вопросы по цепочке «ситуация → проблема → последствия → возможности» из материала QCIC (<a href="https://qcic.ru/katalog/rs/rs-08" target="_blank">источник</a>).</p>
+        </div>
+    </section>
+
+    <section class="section reveal">
+        <div class="container">
+            <h2><i data-lucide="video" style="width:24px;height:24px"></i>Старт созвона</h2>
+            <div class="script-box">
+                <button class="copy-btn" onclick="copyText(this)">Копировать</button>
+                <strong>Вступление:</strong><br><br>
+                Спасибо, что нашли время. Мы исследуем, как владельцы малого бизнеса работают со входящими звонками и пропущенными обращениями. Я не буду продавать продукт на этом созвоне. Хочу понять реальные ситуации: как сейчас устроен процесс, где возникают потери и что для вас было бы полезным. В конце могу коротко описать идею и услышать вашу реакцию.
+            </div>
+            <div class="interviewer-note">
+                <strong>Правило ведения:</strong> на один созвон берите 18-22 вопроса, не читайте весь список подряд. Просите примеры последнего реального случая, уточняйте цифры и паузы, а концепт показывайте только после блока про боль и последствия.
+            </div>
+        </div>
+    </section>
+
+    <section class="section reveal">
+        <div class="container">
+            <h2><i data-lucide="list-checks" style="width:24px;height:24px"></i>Итоговый список вопросов</h2>
+
+            <div class="question-block">
+                <h3><i data-lucide="building-2" style="width:22px;height:22px"></i>1. Контекст и текущая ситуация</h3>
+                <p class="hint">Цель: понять бизнес, поток клиентов и текущий процесс без оценки решения.</p>
+                <ol class="question-list">
+                    <li>Расскажите, чем занимается ваш бизнес и какую роль вы сами играете в операционной работе?</li>
+                    <li>Как к вам обычно приходят новые клиенты: звонки, мессенджеры, карты, рекомендации, сайт, соцсети?</li>
+                    <li>Как выглядит путь клиента от первого обращения до записи, заявки или оплаты?</li>
+                    <li>В какие дни и часы звонков больше всего, и кто в это время отвечает?</li>
+                    <li>Какие вопросы клиенты чаще всего задают по телефону перед тем, как записаться или оставить заявку?</li>
+                    <li>Какие инструменты сейчас используются для записи и контроля обращений: календарь, CRM, таблица, YCLIENTS/DIKIDI, мессенджеры?</li>
+                </ol>
+            </div>
+
+            <div class="question-block">
+                <h3><i data-lucide="alert-circle" style="width:22px;height:22px"></i>2. Проблемы и узкие места</h3>
+                <p class="hint">Цель: получить конкретные истории, а не общие мнения.</p>
+                <ol class="question-list" start="7">
+                    <li>Расскажите про последний случай, когда важный звонок не удалось принять сразу.</li>
+                    <li>Что обычно мешает ответить: клиент перед вами, шум, дорога, суд, объект, администратор занят, нерабочее время?</li>
+                    <li>В каких ситуациях клиенту недостаточно написать в мессенджер или воспользоваться онлайн-записью?</li>
+                    <li>Что в текущем процессе обработки звонков больше всего раздражает вас или команду?</li>
+                    <li>Что, по вашим наблюдениям, больше всего раздражает клиентов, когда они звонят в ваш бизнес?</li>
+                    <li>Какие обращения вы не готовы доверить случайному сотруднику, подрядчику или автоматизации?</li>
+                    <li>Какие ошибки в разговоре с клиентом для вас самые опасные?</li>
+                </ol>
+            </div>
+
+            <div class="question-block">
+                <h3><i data-lucide="trending-down" style="width:22px;height:22px"></i>3. Последствия нерешённой проблемы</h3>
+                <p class="hint">Цель: оценить цену боли и срочность проблемы.</p>
+                <ol class="question-list" start="14">
+                    <li>Что обычно происходит с клиентом, если ему не ответили в первые минуты?</li>
+                    <li>Как вы понимаете, что человек ушёл к конкуренту или просто исчез?</li>
+                    <li>Сколько примерно может стоить один потерянный звонок в вашем бизнесе?</li>
+                    <li>Какие пропущенные звонки для вас самые дорогие, срочные или репутационно рискованные?</li>
+                    <li>Как пропущенные обращения влияют на расписание, загрузку, выручку и ваш личный стресс?</li>
+                </ol>
+            </div>
+
+            <div class="question-block">
+                <h3><i data-lucide="sparkles" style="width:22px;height:22px"></i>4. Идеальный результат</h3>
+                <p class="hint">Цель: узнать требования к продукту до показа концепта.</p>
+                <ol class="question-list" start="19">
+                    <li>Представьте, что пропущенные звонки обрабатываются без вашего участия. Как должен выглядеть идеальный процесс?</li>
+                    <li>Какие задачи помощник может спокойно закрывать сам, а где обязан передавать разговор человеку?</li>
+                    <li>Что должно быть в сводке после разговора, чтобы она была действительно полезна?</li>
+                    <li>Какие настройки вы хотели бы контролировать лично: сценарии, цены, расписание, тон общения, стоп-темы?</li>
+                    <li>Какие фразы, темы или действия такому помощнику нужно запретить?</li>
+                    <li>По каким признакам через месяц вы бы поняли, что решение реально работает?</li>
+                </ol>
+            </div>
+
+            <div class="question-block">
+                <h3><i data-lucide="bot" style="width:22px;height:22px"></i>5. Реакция на концепт AI-ассистента</h3>
+                <p class="hint">Цель: проверить доверие, ограничения и условия пилота. Этот блок задаётся после обсуждения боли.</p>
+                <ol class="question-list" start="25">
+                    <li>Когда вы слышите идею «AI отвечает на пропущенный звонок через 15 секунд», что первое приходит в голову?</li>
+                    <li>Что в такой идее выглядит полезным именно для вашего бизнеса?</li>
+                    <li>Что выглядит опасным, неприятным или недопустимым?</li>
+                    <li>Как клиент должен понять, что разговаривает с AI-помощником, чтобы доверие к бизнесу не пострадало?</li>
+                    <li>Какие интеграции обязательны с первого дня: телефония, календарь, CRM, YCLIENTS/DIKIDI, Telegram, WhatsApp?</li>
+                    <li>Какой тест на 1-2 недели убедил бы вас попробовать решение на реальных звонках?</li>
+                </ol>
+            </div>
+
+            <div class="question-block">
+                <h3><i data-lucide="wallet" style="width:22px;height:22px"></i>6. Готовность пробовать и платить</h3>
+                <p class="hint">Цель: понять покупательский процесс, бюджет и критерии отказа.</p>
+                <ol class="question-list" start="31">
+                    <li>Как вы обычно принимаете решение о подключении нового сервиса для бизнеса?</li>
+                    <li>Какие расходы на связь, администраторов, CRM, онлайн-запись или лидогенерацию у вас уже есть?</li>
+                    <li>Какую цену вы считали бы честной, если сервис возвращает часть потерянных заявок?</li>
+                    <li>Что должно произойти, чтобы вы отказались от сервиса после тестового периода?</li>
+                    <li>Кто кроме вас должен участвовать в решении о подключении?</li>
+                </ol>
+            </div>
+
+            <div class="question-block">
+                <h3><i data-lucide="flag" style="width:22px;height:22px"></i>7. Завершение</h3>
+                <p class="hint">Цель: закрыть пробелы и получить следующие контакты.</p>
+                <ol class="question-list" start="36">
+                    <li>О чём я не спросил, но это важно для темы звонков, клиентов и записи?</li>
+                    <li>С кем ещё из владельцев малого бизнеса стоит поговорить на эту тему?</li>
+                    <li>Можно ли позже показать вам короткий прототип и обсудить впечатления?</li>
+                </ol>
+            </div>
+        </div>
+    </section>
+
+    <section class="section reveal" style="background:#fffbeb">
+        <div class="container">
+            <h2><i data-lucide="clipboard-list" style="width:24px;height:24px"></i>Что фиксировать после интервью</h2>
+            <div class="score-grid">
+                <div class="score-item">
+                    <h3>Сигналы боли</h3>
+                    <ul>
+                        <li>Сколько звонков в день и сколько теряется.</li>
+                        <li>Последний конкретный потерянный клиент.</li>
+                        <li>Деньги, срочность, репутационный риск.</li>
+                    </ul>
+                </div>
+                <div class="score-item">
+                    <h3>Сигналы покупки</h3>
+                    <ul>
+                        <li>Готовность дать реальные звонки на пилот.</li>
+                        <li>Понятный бюджет или текущие расходы-заменители.</li>
+                        <li>Чёткие условия доверия к AI-разговору.</li>
+                    </ul>
+                </div>
+                <div class="score-item">
+                    <h3>Красные флаги</h3>
+                    <ul>
+                        <li>Звонки почти не влияют на продажи.</li>
+                        <li>Есть администратор, который стабильно закрывает поток.</li>
+                        <li>Владелец не готов давать AI доступ к расписанию или клиентам.</li>
+                    </ul>
+                </div>
+                <div class="score-item">
+                    <h3>Данные для продукта</h3>
+                    <ul>
+                        <li>Типовые вопросы клиентов и стоп-темы.</li>
+                        <li>Обязательные интеграции и каналы уведомлений.</li>
+                        <li>Формат сводки, который владелец реально прочитает.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="padding:30px 0;background:#fff;border-top:1px solid #e5e5e5">
+        <div class="container" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+            <a href="competitors.html" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#f5f5f5;color:#1a1a1a;text-decoration:none;border-radius:8px;font-size:0.9em;font-weight:500">
+                <i data-lucide="arrow-left" style="width:16px;height:16px"></i>
+                Назад: Конкуренты
+            </a>
+            <a href="sources.html" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#1a1a1a;color:#fff;text-decoration:none;border-radius:8px;font-size:0.9em;font-weight:500">
+                Далее: Источники
+                <i data-lucide="arrow-right" style="width:16px;height:16px"></i>
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <a href="index.html">Продукт</a>
+            <a href="scenarios.html">Сценарии</a>
+            <a href="integrations.html">Интеграции</a>
+            <a href="economics.html">Экономика</a>
+            <a href="focus.html">Фокусы</a>
+            <a href="competitors.html">Конкуренты</a>
+            <a href="custdev.html">Кастдев</a>
+            <a href="sources.html">Источники</a>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        const lenis=new Lenis({duration:0.8,easing:(t)=>Math.min(1,1.001-Math.pow(2,-10*t)),smoothWheel:true});
+        function raf(time){lenis.raf(time);requestAnimationFrame(raf);}
+        requestAnimationFrame(raf);
+        const revealObserver=new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible');});},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+        document.querySelectorAll('.reveal').forEach(el=>{revealObserver.observe(el);});
+        function copyText(btn){
+            const box=btn.parentElement;
+            const text=box.innerText.replace('Копировать','').trim();
+            navigator.clipboard.writeText(text).then(()=>{btn.textContent='Скопировано!';setTimeout(()=>{btn.textContent='Копировать';},2000);});
+        }
+    </script>
+</body>
+</html>
